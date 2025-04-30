@@ -46,6 +46,24 @@ impl EventHandler for Handler {
                 }
             }
         }
+        if msg.content.starts_with("!mc") {
+            let parts: Vec<&str> = msg.content.splitn(2, ' ').collect();
+            if parts.len() > 1 {
+                let content_after_command = parts[1];
+                let response = format!("https://zh.minecraft.wiki/w/{}/", content_after_command);
+                if let Err(why) = msg.channel_id.say(&ctx.http, response).await {
+                    println!("Error sending message: {why:?}");
+                }
+            } else {
+                if let Err(why) = msg
+                    .channel_id
+                    .say(&ctx.http, "Please provide a name!")
+                    .await
+                {
+                    println!("Error sending message: {why:?}");
+                }
+            }
+        }
     }
 }
 
